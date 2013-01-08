@@ -54,6 +54,19 @@ public class Location {
 	public void setName(String n) {
 		this.name = n;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		 if(obj == null)                return false;
+		 if (obj instanceof Location){
+		    
+		    Location other = (Location) obj;
+		    return this.name.equals(other.name);
+		 } else { 
+			 return false;
+		 }
+		
+	}
 
 	public boolean toXML(String xmlRecords) {
 		boolean resp = false;
