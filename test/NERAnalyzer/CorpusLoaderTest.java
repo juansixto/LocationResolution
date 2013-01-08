@@ -22,7 +22,7 @@ public class CorpusLoaderTest {
 	
 	@Test
 	public void loadTest() {
-		myCL.LoadCorpus(".\\Corpus\\100tweetsCorpus.txt");
+		myCL.LoadCorpus("corpus/100tweetsCorpus.txt", 1);
 	}
 	
 

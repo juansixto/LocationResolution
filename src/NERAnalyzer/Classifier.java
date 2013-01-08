@@ -20,10 +20,9 @@ public class Classifier {
 	static Nominatim myNom;
 	
 	static List<Location> myLocs;
-	static List<Location> trueLocs;
+	static List<Location> trueLocs = new ArrayList<Location>();
 
 	public static void main(String[] args) {
-		
 		try {
 			Properties prop = new Properties();
 			InputStream is = new FileInputStream("location_resolution.properties");

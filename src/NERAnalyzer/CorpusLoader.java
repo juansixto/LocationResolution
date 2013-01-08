@@ -16,8 +16,7 @@ public class CorpusLoader {
 		this.sentences = new ArrayList<String>();
 	}
 
-	public boolean LoadCorpus(String filename, int max_lines) {
-		boolean resp = false;
+	public void LoadCorpus(String filename, int max_lines) {
 		int i = 0;
 		boolean isJSON = false;
 		
@@ -31,8 +30,10 @@ public class CorpusLoader {
 		for (String line : ObjectBank.getLineIterator(filename)) {
 			if(isJSON) {
 				try {
-					String text = new JSONObject(line).getString("text");
-					this.sentences.add(text);
+					if(!line.equals("")) {
+						String text = new JSONObject(line).getString("text");
+						this.sentences.add(text);
+					}
 				}
 				catch (JSONException e) {
 					e.printStackTrace();
@@ -49,7 +50,5 @@ public class CorpusLoader {
 		}
 		
 		System.out.println("Generado Corpus con " + i + " tweets");
-		
-		return resp;
 	}
 }
