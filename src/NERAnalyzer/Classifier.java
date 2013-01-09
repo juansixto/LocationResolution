@@ -36,6 +36,9 @@ public class Classifier {
 			
 			int found = 0;
 			int deleted = 0;
+			int request = 0;
+			int prog = 0;
+			
 			
 			Iterator<String> iter = myCL.sentences.iterator();
 			
@@ -47,6 +50,7 @@ public class Classifier {
 			Iterator<Location> locs = myLocs.iterator();
 			
 			while (locs.hasNext()) {
+				System.out.println("Progreso: " + (prog++*100/myLocs.size()) + "%");
 				Location loc = (Location) locs.next();
 				
 				if (trueLocs.contains(loc)) {
@@ -60,6 +64,7 @@ public class Classifier {
 						deleted++;
 					}
 					else {
+						request++;
 						found++;
 						trueLocs.add(loc);
 					}
@@ -67,6 +72,7 @@ public class Classifier {
 			}
 			System.out.println("***********************************************************************");
 			System.out.println("Encontradas " + found + " referencias en " + myCL.sentences.size() + " tweets");
+			System.out.println("Se han realizado "+ request + " consultas a OSMNominatim");
 			System.out.println("No encontradas y borradas " + deleted + " referencias");
 			System.out.println("***********************************************************************");
 		}

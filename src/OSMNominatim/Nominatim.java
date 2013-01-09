@@ -12,6 +12,7 @@ public class Nominatim {
 
 	static String URL = "http://nominatim.openstreetmap.org/search";
 	static String FORMAT = "&format=xml&accept-language=en-US";
+	static int LIMIT = 1;
 
 	public Nominatim() {}
 
@@ -21,8 +22,10 @@ public class Nominatim {
 		BufferedReader bReader = null;
 		String lineaURL;
 		StringBuffer buffer = new StringBuffer();
-		String myURL = URL + "?q=" + location.getName() + FORMAT;
-
+		String name = location.getName().replace(" ", "+");
+		
+		String myURL = URL + "?q=" + name + FORMAT +"&limit="+LIMIT;
+		System.out.println(myURL);
 		try {
 			miURL = new URL(myURL);
 			isReader = new InputStreamReader(miURL.openStream());
@@ -41,7 +44,6 @@ public class Nominatim {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		return location.toXML(buffer.toString());
 	}
 }
