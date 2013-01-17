@@ -1,4 +1,4 @@
-package OSMNominatim;
+package YahooGeoPlanet;
 
 import static org.junit.Assert.*;
 
@@ -7,14 +7,15 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import Classes.Location;
+import OSMNominatim.Nominatim;
 
-public class NominatimTest {
-	
-	public Nominatim myNom;
+public class YahooGpTest {
+
+	public YahooGp myNom;
 
 	@Before
 	public void setUp() throws Exception {
-		myNom = new Nominatim();
+		myNom = new YahooGp();
 	}
 
 	@Test
@@ -46,7 +47,4 @@ public class NominatimTest {
 		Location loc = new Location("Hamilton Wood Type Museum");
 		System.out.println(myNom.getUrlString(loc));
 	}
-	
-	
-
 }

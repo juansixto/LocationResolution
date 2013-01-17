@@ -1,4 +1,4 @@
-package OSMNominatim;
+package Geonames;
 
 import static org.junit.Assert.*;
 
@@ -7,14 +7,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import Classes.Location;
+import OSMNominatim.Nominatim;
 
-public class NominatimTest {
-	
-	public Nominatim myNom;
+public class GeonamesTest {
 
+	Geonames myNom;
 	@Before
 	public void setUp() throws Exception {
-		myNom = new Nominatim();
+		myNom = new Geonames();
 	}
 
 	@Test
@@ -47,6 +47,4 @@ public class NominatimTest {
 		System.out.println(myNom.getUrlString(loc));
 	}
 	
-	
-
 }

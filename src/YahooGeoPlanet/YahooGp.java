@@ -1,4 +1,4 @@
-package OSMNominatim;
+package YahooGeoPlanet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,13 +8,13 @@ import java.net.URL;
 
 import Classes.Location;
 
-public class Nominatim {
-
-	static String URL = "http://nominatim.openstreetmap.org/search";
-	static String FORMAT = "&format=xml&accept-language=en-US";
+public class YahooGp {
+	static String URL1 = "http://where.yahooapis.com/v1/places.q('";
+	static String URL2 = "');start=0;count=";
+	static String URL3 = "?appid=tTD8DLzV34EBP5gPd3vxWFeBTCMxs74RFmqZMet2fkHU6vn7MBwNJY72MG6lTuO_kQ--";
 	static int LIMIT = 1;
 
-	public Nominatim() {}
+	public YahooGp() {}
 
 	public boolean getUrlString(Location location) {
 		URL miURL = null;
@@ -24,7 +24,7 @@ public class Nominatim {
 		StringBuffer buffer = new StringBuffer();
 		String name = location.getName().replace(" ", "+");
 		
-		String myURL = URL + "?q=" + name + FORMAT +"&limit="+LIMIT;
+		String myURL = URL1 + name + URL2 + LIMIT + URL3;
 		System.out.println(myURL);
 		try {
 			miURL = new URL(myURL);
@@ -44,6 +44,6 @@ public class Nominatim {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		return location.NominatimtoXML(buffer.toString());
+		return location.YahooGptoXML(buffer.toString());
 	}
 }

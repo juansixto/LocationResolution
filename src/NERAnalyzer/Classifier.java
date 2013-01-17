@@ -29,7 +29,7 @@ public class Classifier {
 		    prop.load(is);
 		    
 			myCL = new CorpusLoader();
-			myNom = new Nominatim();
+			myNom = new Nominatim();  //Change
 			myLocs = new ArrayList<>();
 			myCL.LoadCorpus("corpus/" + prop.getProperty("corpus_filename"), Integer.parseInt(prop.getProperty("number_of_tweets")));
 			myNER = new NERAnalyzer();

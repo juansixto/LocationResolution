@@ -5,7 +5,9 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -68,7 +70,7 @@ public class Location {
 		
 	}
 
-	public boolean toXML(String xmlRecords) {
+	public boolean NominatimtoXML(String xmlRecords) {
 		boolean resp = false;
 		
 		try {
@@ -109,4 +111,157 @@ public class Location {
 		
 		return resp;
 	}
+	
+	public boolean GeonametoXML(String xmlRecords) {
+		boolean resp = true;
+		
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(xmlRecords));
+
+			Document doc = db.parse(is);
+			NodeList nodes = doc.getElementsByTagName("code");
+			if (nodes.getLength() > 0){
+			for (int s = 0; s < nodes.getLength(); s++) {
+				Node primerNodo = nodes.item(s);
+				if (primerNodo.getNodeType() == Node.ELEMENT_NODE) {
+					Element primerElemento = (Element) primerNodo;
+					
+					NodeList firstList = primerElemento.getElementsByTagName("name");
+					Element firstElement =(Element) firstList.item(0);
+					NodeList Name = firstElement.getChildNodes();
+					this.display_name = ((Node) Name.item(0)).getNodeValue().toString();
+					System.out.println("DisplayName : "  + this.display_name);
+					
+					NodeList secondList = primerElemento.getElementsByTagName("lat");
+					Element secondElement =(Element) secondList.item(0);
+					NodeList Lat = secondElement.getChildNodes();
+					this.lat = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Latitude : "  + this.lat);
+					
+					secondList = primerElemento.getElementsByTagName("lng");
+					secondElement =(Element) secondList.item(0);
+					Lat = secondElement.getChildNodes();
+					this.lon = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Longitude : "  + this.lon);
+					
+				} 
+				
+			}
+			}else{
+				resp = false;
+			}			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resp;
+	}
+	
+	public boolean GoogletoXML(String xmlRecords) {
+		boolean resp = true;
+		
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(xmlRecords));
+
+			Document doc = db.parse(is);
+			NodeList nodes = doc.getElementsByTagName("result");
+			if (nodes.getLength() > 0){
+			for (int s = 0; s < 1; s++) {
+				Node primerNodo = nodes.item(s);
+				if (primerNodo.getNodeType() == Node.ELEMENT_NODE) {
+					Element primerElemento = (Element) primerNodo;
+					
+					NodeList firstList = primerElemento.getElementsByTagName("formatted_address");
+					Element firstElement =(Element) firstList.item(0);
+					NodeList Name = firstElement.getChildNodes();
+					this.display_name = ((Node) Name.item(0)).getNodeValue().toString();
+					System.out.println("DisplayName : "  + this.display_name);
+					
+					NodeList secondList = primerElemento.getElementsByTagName("lat");
+					Element secondElement =(Element) secondList.item(0);
+					NodeList Lat = secondElement.getChildNodes();
+					this.lat = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Latitude : "  + this.lat);
+					
+					secondList = primerElemento.getElementsByTagName("lng");
+					secondElement =(Element) secondList.item(0);
+					Lat = secondElement.getChildNodes();
+					this.lon = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Longitude : "  + this.lon);
+					
+				} 
+				
+			}
+			}else{
+				resp = false;
+			}			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resp;
+	}
+	
+	public boolean YahooGptoXML(String xmlRecords) {
+		boolean resp = true;
+		
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(xmlRecords));
+
+			Document doc = db.parse(is);
+			NodeList nodes = doc.getElementsByTagName("place");
+			if (nodes.getLength() > 0){
+			for (int s = 0; s < 1; s++) {
+				Node primerNodo = nodes.item(s);
+				if (primerNodo.getNodeType() == Node.ELEMENT_NODE) {
+					Element primerElemento = (Element) primerNodo;
+					
+					NodeList firstList = primerElemento.getElementsByTagName("name");
+					Element firstElement =(Element) firstList.item(0);
+					NodeList Name = firstElement.getChildNodes();
+					this.display_name = ((Node) Name.item(0)).getNodeValue().toString();
+					System.out.println("DisplayName : "  + this.display_name);
+					
+					NodeList secondList = primerElemento.getElementsByTagName("latitude");
+					Element secondElement =(Element) secondList.item(0);
+					NodeList Lat = secondElement.getChildNodes();
+					this.lat = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Latitude : "  + this.lat);
+					
+					secondList = primerElemento.getElementsByTagName("longitude");
+					secondElement =(Element) secondList.item(0);
+					Lat = secondElement.getChildNodes();
+					this.lon = ((Node) Lat.item(0)).getNodeValue().toString();
+					System.out.println("Longitude : "  + this.lon);
+					
+				} 
+				
+			}
+			}else{
+				resp = false;
+			}			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resp;
+	}
+	
+	public String getTagValue(String tag, Element elemento) {
+		NodeList lista = ((Document) elemento).getElementsByTagName(tag).item(0).getChildNodes();
+		Node valor = (Node) lista.item(0);
+		return valor.getNodeValue();
+		}
 }

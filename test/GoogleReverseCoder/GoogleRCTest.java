@@ -1,28 +1,20 @@
-package OSMNominatim;
+package GoogleReverseCoder;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import Classes.Location;
 
-public class NominatimTest {
-	
-	public Nominatim myNom;
+public class GoogleRCTest {
 
-	@Before
-	public void setUp() throws Exception {
-		myNom = new Nominatim();
-	}
-
-	@Test
+	GoogleRC myNom = new GoogleRC();
 	@Ignore
+	@Test
 	public void test() {
 		fail("Not yet implemented");
 	}
-	
 	
 	@Test
 	public void XMLTestTrue() {
@@ -47,6 +39,4 @@ public class NominatimTest {
 		System.out.println(myNom.getUrlString(loc));
 	}
 	
-	
-
 }

@@ -1,4 +1,4 @@
-package OSMNominatim;
+package GoogleReverseCoder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,13 +8,12 @@ import java.net.URL;
 
 import Classes.Location;
 
-public class Nominatim {
+public class GoogleRC {
 
-	static String URL = "http://nominatim.openstreetmap.org/search";
-	static String FORMAT = "&format=xml&accept-language=en-US";
+	static String URL = "http://maps.googleapis.com/maps/api/geocode/xml?address=";
 	static int LIMIT = 1;
 
-	public Nominatim() {}
+	public GoogleRC() {}
 
 	public boolean getUrlString(Location location) {
 		URL miURL = null;
@@ -24,7 +23,7 @@ public class Nominatim {
 		StringBuffer buffer = new StringBuffer();
 		String name = location.getName().replace(" ", "+");
 		
-		String myURL = URL + "?q=" + name + FORMAT +"&limit="+LIMIT;
+		String myURL = URL + name+"&sensor=false";
 		System.out.println(myURL);
 		try {
 			miURL = new URL(myURL);
@@ -44,6 +43,7 @@ public class Nominatim {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		return location.NominatimtoXML(buffer.toString());
+		System.out.println(buffer.toString());
+		return location.GoogletoXML(buffer.toString());
 	}
 }
