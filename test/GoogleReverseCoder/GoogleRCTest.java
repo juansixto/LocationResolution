@@ -17,24 +17,24 @@ public class GoogleRCTest {
 	}
 	
 	@Test
-	public void XMLTestTrue() {
+	public void XMLTestTrue() throws InterruptedException {
 		Location loc = new Location("berlin");
 		assertTrue(myNom.getUrlString(loc));
 	}
 	
 	@Test
-	public void XMLTestFalse() {
+	public void XMLTestFalse() throws InterruptedException {
 		Location loc = new Location("jksfasfajkl");
 		assertFalse(myNom.getUrlString(loc));
 	}
 	
 	@Test
-	public void XMLTestTrash() {
+	public void XMLTestTrash() throws InterruptedException {
 		Location loc = new Location("egypt");
 		System.out.println(myNom.getUrlString(loc));
 	}
 	@Test
-	public void URLMultiWord() {
+	public void URLMultiWord() throws InterruptedException {
 		Location loc = new Location("Hamilton Wood Type Museum");
 		System.out.println(myNom.getUrlString(loc));
 	}

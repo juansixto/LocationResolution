@@ -16,15 +16,14 @@ import Geonames.Geonames;
 import GoogleReverseCoder.GoogleRC;
 import OSMNominatim.Nominatim;
 
-public class Classifier {
+public class WebServices {
 
 	static CorpusLoader myCL;
-	static NERAnalyzer myNER;
-	
 	static Nominatim myNom;
 	
 	static List<Location> myLocs;
 	static List<Location> trueLocs = new ArrayList<Location>();
+	static List<Location> falseLocs = new ArrayList<Location>();
 
 	public static void main(String[] args) throws InterruptedException {
 		try {
@@ -36,7 +35,6 @@ public class Classifier {
 			myNom = new Nominatim();  //Change
 			myLocs = new ArrayList<>();
 			myCL.LoadCorpus("corpus/" + prop.getProperty("corpus_filename"), Integer.parseInt(prop.getProperty("number_of_tweets")));
-			myNER = new NERAnalyzer();
 			
 			int found = 0;
 			int deleted = 0;
@@ -48,10 +46,13 @@ public class Classifier {
 			
 			while (iter.hasNext()) {
 				String tweet = (String) iter.next();
-				myLocs.addAll(myNER.extractLocations(tweet));
+				myLocs.add(new Location(tweet));
+				
 			}
 		
 			Iterator<Location> locs = myLocs.iterator();
+			
+			
 			
 			while (locs.hasNext()) {
 				System.out.println("Progreso: " + (prog++*100/myLocs.size()) + "%");
@@ -61,16 +62,23 @@ public class Classifier {
 					found++;
 				}
 				else {
-					if (!myNom.getUrlString(loc)) {
-						System.out.println("*************************");
-						System.out.println(loc.getName() + " not found and removed");
-						System.out.println();
+					if(falseLocs.contains(loc)){
 						deleted++;
 					}
-					else {
-						request++;
-						found++;
-						trueLocs.add(loc);
+					else{
+						if (!myNom.getUrlString(loc)) {
+							System.out.println("*************************");
+							System.out.println(loc.getName() + " not found and removed");
+							System.out.println();
+							request++;
+							deleted++;
+							falseLocs.add(loc);
+						}
+						else {
+							request++;
+							found++;
+							trueLocs.add(loc);
+						}
 					}
 				}
 			}
@@ -78,6 +86,8 @@ public class Classifier {
 			System.out.println("Encontradas " + found + " referencias en " + myCL.sentences.size() + " tweets");
 			System.out.println("Se han realizado "+ request + " consultas a OSMNominatim");
 			System.out.println("No encontradas y borradas " + deleted + " referencias");
+			System.out.println("Encontrados "+trueLocs.size() + " lugares únicos");
+			System.out.println("Borrados " +falseLocs.size() +" lugares únicos");
 			System.out.println("***********************************************************************");
 		}
 		catch (FileNotFoundException e) {
@@ -87,4 +97,6 @@ public class Classifier {
 			e.printStackTrace();
 		}		
 	}
+	
+	
 }

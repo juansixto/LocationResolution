@@ -32,6 +32,7 @@ public class CorpusLoader {
 				try {
 					if(!line.equals("")) {
 						String text = new JSONObject(line).getString("text");
+						text = text.replaceAll("#", "");
 						this.sentences.add(text);
 					}
 				}
@@ -40,6 +41,7 @@ public class CorpusLoader {
 				}
 			}
 			else {
+				line = line.replaceAll("#", "");
 				this.sentences.add(line);
 			}
 			

@@ -63,7 +63,7 @@ public class Location {
 		 if (obj instanceof Location){
 		    
 		    Location other = (Location) obj;
-		    return this.name.equals(other.name);
+		    return this.name.equalsIgnoreCase(other.name);
 		 } else { 
 			 return false;
 		 }

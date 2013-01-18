@@ -15,7 +15,7 @@ public class GoogleRC {
 
 	public GoogleRC() {}
 
-	public boolean getUrlString(Location location) {
+	public boolean getUrlString(Location location) throws InterruptedException {
 		URL miURL = null;
 		InputStreamReader isReader = null;
 		BufferedReader bReader = null;
@@ -44,6 +44,7 @@ public class GoogleRC {
 			e.printStackTrace();
 		}
 		System.out.println(buffer.toString());
+		Thread.sleep(1000);
 		return location.GoogletoXML(buffer.toString());
 	}
 }
