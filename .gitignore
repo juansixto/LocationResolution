@@ -1,6 +1,17 @@
-/bin
+bin/**
+
 *.class
 
 # Package Files #
 *.war
 *.ear
+
+.project
+.metadata
+.classpath
+.settings/
+.loadpath
+
+
+# Locally stored "Eclipse launch configurations"
+*.launch
