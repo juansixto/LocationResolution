@@ -19,7 +19,7 @@ public class Main {
 		OSMNominatim osmn = new OSMNominatim();
 		YahooGeoPlanet ygp = new YahooGeoPlanet();
 		
-		String placename = "Bilbao";
+		String placename = "Vitoria";
 		
 		List<GeoPoint> lgpgn = gn.searchPlace(placename);
 		List<GeoPoint> lgpgrc = grc.searchPlace(placename);
@@ -28,39 +28,39 @@ public class Main {
 		
 		List<LocationDescriptor> lld = new ArrayList<LocationDescriptor>();
 		
-//		System.out.println("Geonames:");
-//		System.out.println("---------------------------------");
+		System.out.println("Geonames:");
+		System.out.println("---------------------------------");
 		for(GeoPoint gp: lgpgn) {
 //			System.out.println(gp.toString());
-//			System.out.println(new LocationDescriptor(gp).toString());
+			System.out.println(new LocationDescriptor(gp).toString());
 			lld.add(new LocationDescriptor(gp));
 		}
 
-//		System.out.println("\nGoogle Reverse Coder:");
-//		System.out.println("---------------------------------");
+		System.out.println("\nGoogle Reverse Coder:");
+		System.out.println("---------------------------------");
 		for(GeoPoint gp: lgpgrc) {
 //			System.out.println(gp.toString());
-//			System.out.println(new LocationDescriptor(gp).toString());
+			System.out.println(new LocationDescriptor(gp).toString());
 			lld.add(new LocationDescriptor(gp));
 		}
 
-//		System.out.println("\nOSM Nominatim:");
-//		System.out.println("---------------------------------");
+		System.out.println("\nOSM Nominatim:");
+		System.out.println("---------------------------------");
 		for(GeoPoint gp: lgposmn) {
 //			System.out.println(gp.toString());
-//			System.out.println(new LocationDescriptor(gp).toString());
+			System.out.println(new LocationDescriptor(gp).toString());
 			lld.add(new LocationDescriptor(gp));
 		}
 
-//		System.out.println("\nYahoo GeoPlanet:");
-//		System.out.println("---------------------------------");
+		System.out.println("\nYahoo GeoPlanet:");
+		System.out.println("---------------------------------");
 		for(GeoPoint gp: lgpygp) {
 //			System.out.println(gp.toString());
-//			System.out.println(new LocationDescriptor(gp).toString());
+			System.out.println(new LocationDescriptor(gp).toString());
 			lld.add(new LocationDescriptor(gp));
 		}
 		
-		LocationDetector ld = new LocationDetector();
-		ld.detectLocation(lld, (float) 0.1);
+//		LocationDetector ld = new LocationDetector();
+//		ld.detectLocation(lld, (float) 0.1);
 	}
 }
