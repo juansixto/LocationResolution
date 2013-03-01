@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import location.resolution.aux.GeoPoint;
 import location.resolution.aux.Utils;
+import location.resolution.models.GeoPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;

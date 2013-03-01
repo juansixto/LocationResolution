@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import location.resolution.aux.GeoPoint;
+import location.resolution.models.GeoPoint;
 
 import org.geonames.Toponym;
 import org.geonames.ToponymSearchCriteria;

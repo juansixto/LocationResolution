@@ -1,4 +1,4 @@
-package location.resolution.aux;
+package location.resolution.models;
 
 public class GeoPoint {
 	

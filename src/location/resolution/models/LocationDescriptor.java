@@ -1,4 +1,4 @@
-package location.resolution.aux;
+package location.resolution.models;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+
+import location.resolution.aux.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
