@@ -19,7 +19,7 @@ public class Main {
 		OSMNominatim osmn = new OSMNominatim();
 		YahooGeoPlanet ygp = new YahooGeoPlanet();
 		
-		String placename = "Tokyo";
+		String placename = "Mathematics Building TU, Berlin";
 		
 		List<LocationDescriptor> lldgn = gn.searchPlace(placename);
 		List<LocationDescriptor> lldgrc = grc.searchPlace(placename);
@@ -59,6 +59,7 @@ public class Main {
 //		LocationDetector ld = new LocationDetector();
 //		ld.detectLocation(lld, (float) 0.1);
 		
-		new Demo(lld).setVisible(true);
+//		new Demo(lld).setVisible(true);
+		new Demo(lldgn, lldgrc, lldosmn, lldygp).setVisible(true);
 	}
 }

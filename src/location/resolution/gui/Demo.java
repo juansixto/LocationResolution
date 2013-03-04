@@ -8,10 +8,13 @@ import java.util.List;
 
 import javax.swing.*;
 
+import location.resolution.models.GeoPoint;
 import location.resolution.models.LocationDescriptor;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
+import org.openstreetmap.gui.jmapviewer.MapRectangleImpl;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
 import org.openstreetmap.gui.jmapviewer.OsmTileLoader;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
@@ -35,7 +38,11 @@ public class Demo extends JFrame implements JMapViewerEventListener  {
     private JLabel mperpLabelName=null;
     private JLabel mperpLabelValue = null;
 
-    public Demo(List<LocationDescriptor> lld) {
+//    public Demo(List<LocationDescriptor> lld) {
+    public Demo(List<LocationDescriptor> lldgn,
+	    		List<LocationDescriptor> lldgrc,
+	    		List<LocationDescriptor> lldosmn,
+	    		List<LocationDescriptor> lldygp	) {
         super("JMapViewer Demo");
         setSize(400, 400);
 
@@ -144,8 +151,93 @@ public class Demo extends JFrame implements JMapViewerEventListener  {
 
         add(map, BorderLayout.CENTER);
         
-        for(LocationDescriptor ld : lld) {
+//        for(LocationDescriptor ld : lld) {
+//        	map.addMapMarker(new MapMarkerDot(Color.BLUE, ld.getLatitude(), ld.getLongitude()));
+//        	
+//        	try {
+//	        	List<GeoPoint> boundingBox = ld.getBoundingBox().getGeoPoints();
+//	        	boundingBox.get(0).getLatitude();
+//	        	
+//	        	Coordinate northWest = new Coordinate(boundingBox.get(1).getLatitude(), boundingBox.get(0).getLongitude());
+//	        	Coordinate southEast = new Coordinate(boundingBox.get(0).getLatitude(), boundingBox.get(1).getLongitude());
+//	
+//	        	map.addMapRectangle(new MapRectangleImpl(northWest, southEast, Color.YELLOW, new BasicStroke(5)));
+//        	}
+//        	catch (Exception e) {
+//        		// TODO
+//        	}
+//        }
+        
+        /* GeoNames */
+        for(LocationDescriptor ld : lldgn) {
         	map.addMapMarker(new MapMarkerDot(Color.BLUE, ld.getLatitude(), ld.getLongitude()));
+        	
+        	try {
+	        	List<GeoPoint> boundingBox = ld.getBoundingBox().getGeoPoints();
+	        	boundingBox.get(0).getLatitude();
+	        	
+	        	Coordinate northWest = new Coordinate(boundingBox.get(1).getLatitude(), boundingBox.get(0).getLongitude());
+	        	Coordinate southEast = new Coordinate(boundingBox.get(0).getLatitude(), boundingBox.get(1).getLongitude());
+	
+	        	map.addMapRectangle(new MapRectangleImpl(northWest, southEast, Color.BLUE, new BasicStroke(5)));
+        	}
+        	catch (Exception e) {
+        		// TODO
+        	}
+        }
+        
+        /* GoogleReverseCoder */
+        for(LocationDescriptor ld : lldgrc) {
+        	map.addMapMarker(new MapMarkerDot(Color.BLACK, ld.getLatitude(), ld.getLongitude()));
+        	
+        	try {
+	        	List<GeoPoint> boundingBox = ld.getBoundingBox().getGeoPoints();
+	        	boundingBox.get(0).getLatitude();
+	        	
+	        	Coordinate northWest = new Coordinate(boundingBox.get(1).getLatitude(), boundingBox.get(0).getLongitude());
+	        	Coordinate southEast = new Coordinate(boundingBox.get(0).getLatitude(), boundingBox.get(1).getLongitude());
+	
+	        	map.addMapRectangle(new MapRectangleImpl(northWest, southEast, Color.BLACK, new BasicStroke(5)));
+        	}
+        	catch (Exception e) {
+        		// TODO
+        	}
+        }
+        
+        /* OSMNominatim */
+        for(LocationDescriptor ld : lldosmn) {
+        	map.addMapMarker(new MapMarkerDot(Color.RED, ld.getLatitude(), ld.getLongitude()));
+        	
+        	try {
+	        	List<GeoPoint> boundingBox = ld.getBoundingBox().getGeoPoints();
+	        	boundingBox.get(0).getLatitude();
+	        	
+	        	Coordinate northWest = new Coordinate(boundingBox.get(1).getLatitude(), boundingBox.get(0).getLongitude());
+	        	Coordinate southEast = new Coordinate(boundingBox.get(0).getLatitude(), boundingBox.get(1).getLongitude());
+	
+	        	map.addMapRectangle(new MapRectangleImpl(northWest, southEast, Color.RED, new BasicStroke(5)));
+        	}
+        	catch (Exception e) {
+        		// TODO
+        	}
+        }
+        
+        /* YahooGeoplanet */
+        for(LocationDescriptor ld : lldygp) {
+        	map.addMapMarker(new MapMarkerDot(Color.GREEN, ld.getLatitude(), ld.getLongitude()));
+        	
+        	try {
+	        	List<GeoPoint> boundingBox = ld.getBoundingBox().getGeoPoints();
+	        	boundingBox.get(0).getLatitude();
+	        	
+	        	Coordinate northWest = new Coordinate(boundingBox.get(1).getLatitude(), boundingBox.get(0).getLongitude());
+	        	Coordinate southEast = new Coordinate(boundingBox.get(0).getLatitude(), boundingBox.get(1).getLongitude());
+	
+	        	map.addMapRectangle(new MapRectangleImpl(northWest, southEast, Color.GREEN, new BasicStroke(5)));
+        	}
+        	catch (Exception e) {
+        		// TODO
+        	}
         }
 
         //
@@ -157,6 +249,8 @@ public class Demo extends JFrame implements JMapViewerEventListener  {
 
         // map.setDisplayPositionByLatLon(49.807, 8.6, 11);
         // map.setTileGridVisible(true);
+        
+//        map.addMapRectangle(new MapRectangleImpl(topLeft, bottomRight))
         
         map.addMouseListener(new MouseAdapter() {
             @Override
