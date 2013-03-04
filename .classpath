@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/org.json.jar"/>
 	<classpathentry kind="lib" path="lib/stanford-ner.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/JMapViewer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

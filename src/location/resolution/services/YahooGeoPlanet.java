@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Properties;
 
 import location.resolution.aux.Utils;
+import location.resolution.models.BoundingBox;
 import location.resolution.models.GeoPoint;
+import location.resolution.models.LocationDescriptor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +56,17 @@ public class YahooGeoPlanet {
 		return str.toString();
 	}
 	
+//	"boundingBox":{
+//        "southWest":{
+//           "latitude":-33.859119,
+//           "longitude":151.213577
+//        },
+//        "northEast":{
+//           "latitude":-33.856159,
+//           "longitude":151.215836
+//        }
+//     },
+	
 	private GeoPoint fillGeoPoint(JSONObject centroidJSONObject) {
 		GeoPoint geoPoint = new GeoPoint();		
 		
@@ -68,8 +81,27 @@ public class YahooGeoPlanet {
 		return geoPoint;
 	}
 	
-	public List<GeoPoint> searchPlace(String placename) {
-		List<GeoPoint> geoPoints = new ArrayList<GeoPoint>();
+	private BoundingBox fillBoundingBox(JSONObject jsonObject) {
+		BoundingBox boundingBox = new BoundingBox();
+		
+		try {
+			JSONObject boundingBoxJSONObject = jsonObject.getJSONObject("boundingBox");
+			
+			JSONObject southWestJSONObject = boundingBoxJSONObject.getJSONObject("southWest");
+			JSONObject northEastJSONObject = boundingBoxJSONObject.getJSONObject("northEast");
+							
+			boundingBox.addGeoPoint(new GeoPoint(southWestJSONObject.getDouble("latitude"), southWestJSONObject.getDouble("longitude")));
+			boundingBox.addGeoPoint(new GeoPoint(northEastJSONObject.getDouble("latitude"), northEastJSONObject.getDouble("longitude")));
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return boundingBox;
+	}
+	
+	public List<LocationDescriptor> searchPlace(String placename) {
+		List<LocationDescriptor> locationDescriptors = new ArrayList<LocationDescriptor>();
 		try {
 			InputStream is = new URL(formURL(placename)).openStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -83,7 +115,10 @@ public class YahooGeoPlanet {
 	    		JSONObject jsonObject = jsonArray.getJSONObject(i);
 	    		JSONObject centroidJSONObject = jsonObject.getJSONObject("centroid");
 	    		
-	    		geoPoints.add(fillGeoPoint(centroidJSONObject));
+	    		GeoPoint geopoint = fillGeoPoint(centroidJSONObject);
+	    		BoundingBox boundingBox = fillBoundingBox(jsonObject);
+	    		
+	    		locationDescriptors.add(new LocationDescriptor(geopoint, boundingBox));
 	    	}
 		}
 		catch (MalformedURLException e) {
@@ -96,6 +131,16 @@ public class YahooGeoPlanet {
 			e.printStackTrace();
 		}
 		
-		return geoPoints;
+		return locationDescriptors;
+	}
+	
+	public static void main(String[] args) {
+		YahooGeoPlanet ygp = new YahooGeoPlanet();
+		
+		List<LocationDescriptor> lld = ygp.searchPlace("london");
+        
+		for(LocationDescriptor ld: lld) {
+			System.out.println(ld.toString());
+		}
 	}
 }

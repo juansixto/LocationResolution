@@ -26,13 +26,19 @@ public class LocationDescriptor {
 	private String city = "";
 	private String suburb = "";
 	private String street = "";
+	
 	private int houseNumber = 0;
+	
 	private double latitude;
 	private double longitude;
 	
+	private BoundingBox boundingBox = null;
+	
 	public LocationDescriptor() {}
 	
-	public LocationDescriptor(GeoPoint geopoint) {
+	public LocationDescriptor(GeoPoint geopoint, BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+		
 		StringBuffer str = new StringBuffer();
 		str.append(NOMINATIM_BASE_URL).append("&lat=").append(geopoint.getLatitude()).append("&lon=").append(geopoint.getLongitude()).append(EXTRAS);
 		
@@ -203,6 +209,13 @@ public class LocationDescriptor {
 		this.longitude = longitude;
 	}
 	
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+	}
+	
 	/* To string */
 	
 	public String toString() {
@@ -241,15 +254,19 @@ public class LocationDescriptor {
 		if(!String.valueOf(this.longitude).isEmpty()) {
 			locationDescriptor.append("longitude: " + this.longitude + ", ");
 		}
+		if(this.boundingBox != null) {
+			locationDescriptor.append("bounding_box: " + this.boundingBox + ", ");
+		}
 		
 		return locationDescriptor.substring(0, locationDescriptor.length() - 2);		
 	}
 	
 	public static void main (String args[]) {
+		BoundingBox boundingBox = null;
 		GeoPoint geopoint = new GeoPoint(42.8498032, -2.672999700000001);
 //		GeoPoint geopoint = new GeoPoint(52.5487429714954, -1.81602098644987);
 		
-		LocationDescriptor ld = new LocationDescriptor(geopoint);
+		LocationDescriptor ld = new LocationDescriptor(geopoint, boundingBox);
 		System.out.println(ld.toString());
 	}
 }

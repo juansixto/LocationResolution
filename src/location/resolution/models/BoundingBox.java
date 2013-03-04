@@ -22,4 +22,22 @@ public class BoundingBox {
 	public void addGeoPoint(GeoPoint geopoint) {
 		this.geoPoints.add(geopoint);
 	}
+	
+	/* to String */
+	
+	public String toString() {
+		StringBuffer str = new StringBuffer();
+		
+		str.append("[");
+		
+		for(GeoPoint gp : geoPoints) {
+			str.append("{" + gp.toString() + "}, ");
+		}
+		
+		String s = str.substring(0, str.length() - 2);
+		
+		s += "]";
+		
+		return s;
+	}
 }

@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Properties;
 
 import location.resolution.aux.Utils;
+import location.resolution.models.BoundingBox;
 import location.resolution.models.GeoPoint;
+import location.resolution.models.LocationDescriptor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,8 +69,32 @@ public class OSMNominatim {
 		return geoPoint;
 	}
 	
-	public List<GeoPoint> searchPlace(String placename) {
-		List<GeoPoint> geoPoints = new ArrayList<GeoPoint>();
+	private BoundingBox fillBoundingBox(JSONObject jsonObject) {
+		BoundingBox boundingBox = new BoundingBox();
+		
+		try {
+			JSONArray boundingBoxJSONArray = jsonObject.getJSONArray("boundingbox");
+			
+			int cut = (boundingBoxJSONArray.length() / 2);
+			
+			for(int i = 0; i < cut; i++) {
+				String lat = boundingBoxJSONArray.getString(i);
+				String lng = boundingBoxJSONArray.getString(i+cut);
+				
+				GeoPoint geoPoint = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lng));
+								
+				boundingBox.addGeoPoint(geoPoint);
+			}
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return boundingBox;
+	}
+	
+	public List<LocationDescriptor> searchPlace(String placename) {
+		List<LocationDescriptor> locationDescriptors = new ArrayList<LocationDescriptor>();
 		try {
 			InputStream is = new URL(formURL(placename)).openStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -79,7 +105,10 @@ public class OSMNominatim {
 	    	for(int i = 0; i < jsonArray.length(); i++) {
 	    		JSONObject jsonObject = jsonArray.getJSONObject(i);
 	    		
-	    		geoPoints.add(fillGeoPoint(jsonObject));
+	    		GeoPoint geopoint = fillGeoPoint(jsonObject);
+	    		BoundingBox boundingBox = fillBoundingBox(jsonObject);
+	    		
+	    		locationDescriptors.add(new LocationDescriptor(geopoint, boundingBox));
 	    	}
 		}
 		catch (MalformedURLException e) {
@@ -92,16 +121,16 @@ public class OSMNominatim {
 			e.printStackTrace();
 		}
 		
-		return geoPoints;
+		return locationDescriptors;
 	}
 	
 	public static void main(String[] args) {
 		OSMNominatim osmn = new OSMNominatim();
 		
-		List<GeoPoint> lgp = osmn.searchPlace("vitoria");
-		
-		for(GeoPoint g: lgp) {
-			System.out.println(g.toString());
+		List<LocationDescriptor> lld = osmn.searchPlace("vitoria-gasteiz");
+        
+		for(LocationDescriptor ld: lld) {
+			System.out.println(ld.toString());
 		}
 	}
 }
