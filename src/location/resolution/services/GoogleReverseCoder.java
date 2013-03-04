@@ -60,6 +60,7 @@ public class GoogleReverseCoder {
 		
 		try {
 			JSONObject locationJSONObject = jsonObject.getJSONObject("location");
+			
 			geoPoint.setLatitude(locationJSONObject.getDouble("lat"));
 			geoPoint.setLongitude(locationJSONObject.getDouble("lng"));
 		}

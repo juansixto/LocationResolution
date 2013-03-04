@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Properties;
 
 import location.resolution.models.GeoPoint;
+import location.resolution.models.LocationDescriptor;
 
 import org.geonames.Toponym;
 import org.geonames.ToponymSearchCriteria;
@@ -47,8 +48,8 @@ public class Geonames {
 		return geoPoint;
 	}
 	
-	public List<GeoPoint> searchPlace(String placename) {
-		List<GeoPoint> geoPoints = new ArrayList<GeoPoint>();
+	public List<LocationDescriptor> searchPlace(String placename) {
+		List<LocationDescriptor> locationDescriptors = new ArrayList<LocationDescriptor>();
 		try {
 			ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
 			searchCriteria.setQ(placename);
@@ -63,13 +64,16 @@ public class Geonames {
 
 			for (int i = 0; i < LIMIT; i++) {
 				Toponym toponym = lt.get(i);
-				geoPoints.add(fillGeoPoint(toponym));
+				
+				GeoPoint geopoint = fillGeoPoint(toponym);
+				
+				locationDescriptors.add(new LocationDescriptor(geopoint, null));
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return geoPoints;
+		return locationDescriptors;
 	}
 }
