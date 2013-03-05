@@ -69,25 +69,40 @@ public class OSMNominatim {
 		return geoPoint;
 	}
 	
-	private BoundingBox fillBoundingBox(JSONObject jsonObject) {
+	private BoundingBox fillBoundingBox(JSONObject jsonObject) throws JSONException {
 		BoundingBox boundingBox = new BoundingBox();
 		
 		try {
 			JSONArray boundingBoxJSONArray = jsonObject.getJSONArray("boundingbox");
+			if(boundingBoxJSONArray.length() == 0) {
+				System.out.println("Hey");
+			}
 			
 			int cut = (boundingBoxJSONArray.length() / 2);
 			
 			for(int i = 0; i < cut; i++) {
-				String lat = boundingBoxJSONArray.getString(i);
-				String lng = boundingBoxJSONArray.getString(i+cut);
+				Double lat;
+				Double lng;
+				try {
+					String slat = boundingBoxJSONArray.getString(i);
+					String slng = boundingBoxJSONArray.getString(i+cut);
+					
+					lat = Double.parseDouble(slat);
+					lng = Double.parseDouble(slng);
+				}
+				catch (JSONException e) {
+					lat = boundingBoxJSONArray.getDouble(i);
+					lng = boundingBoxJSONArray.getDouble(i+cut);
+				}
 				
-				GeoPoint geoPoint = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(lng));
+				GeoPoint geoPoint = new GeoPoint(lat, lng);
 								
 				boundingBox.addGeoPoint(geoPoint);
 			}
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
+			System.out.println(jsonObject.getJSONArray("boundingbox"));
 		}
 		
 		return boundingBox;

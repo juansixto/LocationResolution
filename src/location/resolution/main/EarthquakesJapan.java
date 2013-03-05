@@ -30,7 +30,7 @@ public class EarthquakesJapan {
 		
 		BufferedReader br = null;
 	    try {
-	    	br = new BufferedReader(new FileReader("corpus/Japan2.txt"));
+	    	br = new BufferedReader(new FileReader("corpus/Japan.txt"));
 	    	String line;
 	    	while ((line = br.readLine()) != null) {
 
