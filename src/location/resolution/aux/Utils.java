@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import location.resolution.models.BoundingBox;
 import location.resolution.models.GeoPoint;
 import location.resolution.models.LocationDescriptor;
 
