@@ -56,17 +56,6 @@ public class YahooGeoPlanet {
 		return str.toString();
 	}
 	
-//	"boundingBox":{
-//        "southWest":{
-//           "latitude":-33.859119,
-//           "longitude":151.213577
-//        },
-//        "northEast":{
-//           "latitude":-33.856159,
-//           "longitude":151.215836
-//        }
-//     },
-	
 	private GeoPoint fillGeoPoint(JSONObject centroidJSONObject) {
 		GeoPoint geoPoint = new GeoPoint();		
 		
@@ -109,16 +98,21 @@ public class YahooGeoPlanet {
 	    	JSONObject json = new JSONObject(jsonText);
 	    	is.close();
 	    	
-	    	JSONArray jsonArray = json.getJSONObject("places").getJSONArray("place");
+	    	int total = json.getJSONObject("places").getInt("total");
 	    	
-	    	for(int i = 0; i < jsonArray.length(); i++) {
-	    		JSONObject jsonObject = jsonArray.getJSONObject(i);
-	    		JSONObject centroidJSONObject = jsonObject.getJSONObject("centroid");
-	    		
-	    		GeoPoint geopoint = fillGeoPoint(centroidJSONObject);
-	    		BoundingBox boundingBox = fillBoundingBox(jsonObject);
-	    		
-	    		locationDescriptors.add(new LocationDescriptor(geopoint, boundingBox));
+	    	if(total != 0) {
+	    	
+	    		JSONArray jsonArray = json.getJSONObject("places").getJSONArray("place");
+	    	
+		    	for(int i = 0; i < jsonArray.length(); i++) {
+		    		JSONObject jsonObject = jsonArray.getJSONObject(i);
+		    		JSONObject centroidJSONObject = jsonObject.getJSONObject("centroid");
+		    		
+		    		GeoPoint geopoint = fillGeoPoint(centroidJSONObject);
+		    		BoundingBox boundingBox = fillBoundingBox(jsonObject);
+		    		
+		    		locationDescriptors.add(new LocationDescriptor(geopoint, boundingBox));
+		    	}
 	    	}
 		}
 		catch (MalformedURLException e) {

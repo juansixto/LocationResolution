@@ -50,74 +50,85 @@ public class LocationDescriptor {
 	    	JSONObject jsonObject = new JSONObject(jsonText);
 	    	is.close();
 	    	
-	    	JSONObject addressJSONObject = jsonObject.getJSONObject("address");
+	    	String error = "";
 	    	
 	    	try {
-		    	this.setCountry(addressJSONObject.getString("country"));
-	    	}
-	    	catch (JSONException e) {
-	    		this.setCountry("");
-	    	}
+				error = jsonObject.getString("error");
+			}
+	    	catch (Exception e) {
+				// TODO: handle exception
+			}
 	    	
-	    	try {
-		    	this.setPostcode(addressJSONObject.getString("postcode"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setPostcode("");
-	    	}
+	    	if(!error.equals("Unable to geocode")) {
 	    	
-	    	try {
-		    	this.setState(addressJSONObject.getString("state"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setState("");
-	    	}
+	    		JSONObject addressJSONObject = jsonObject.getJSONObject("address");
 	    	
-	    	try {
-		    	this.setStateDistrict(addressJSONObject.getString("state_district"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setStateDistrict("");
-	    	}
-	    	
-	    	try {
-		    	this.setCounty(addressJSONObject.getString("county"));
-	    	}
-	    	catch (JSONException e) {
-	    		this.setCounty("");
-	    	}
-	    	
-	    	try {
-		    	this.setCity(addressJSONObject.getString("city"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setCity("");
-	    	}
-	    	
-	    	try {
-		    	this.setSuburb(addressJSONObject.getString("suburb"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setSuburb("");
-	    	}
-	    	
-	    	try {
-		    	this.setStreet(addressJSONObject.getString("road"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setStreet("");
-	    	}
-	    	
-	    	try {
-		    	this.setHouseNumber(addressJSONObject.getInt("house_number"));
-	    	}
-	    	catch (JSONException e) {
-		    	this.setHouseNumber(0);
-	    	}
-	    	
-	    	this.setLatitude(geopoint.getLatitude());
-	    	this.setLongitude(geopoint.getLongitude());
+		    	try {
+			    	this.setCountry(addressJSONObject.getString("country"));
+		    	}
+		    	catch (JSONException e) {
+		    		this.setCountry("");
+		    	}
 		    	
+		    	try {
+			    	this.setPostcode(addressJSONObject.getString("postcode"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setPostcode("");
+		    	}
+		    	
+		    	try {
+			    	this.setState(addressJSONObject.getString("state"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setState("");
+		    	}
+		    	
+		    	try {
+			    	this.setStateDistrict(addressJSONObject.getString("state_district"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setStateDistrict("");
+		    	}
+		    	
+		    	try {
+			    	this.setCounty(addressJSONObject.getString("county"));
+		    	}
+		    	catch (JSONException e) {
+		    		this.setCounty("");
+		    	}
+		    	
+		    	try {
+			    	this.setCity(addressJSONObject.getString("city"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setCity("");
+		    	}
+		    	
+		    	try {
+			    	this.setSuburb(addressJSONObject.getString("suburb"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setSuburb("");
+		    	}
+		    	
+		    	try {
+			    	this.setStreet(addressJSONObject.getString("road"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setStreet("");
+		    	}
+		    	
+		    	try {
+			    	this.setHouseNumber(addressJSONObject.getInt("house_number"));
+		    	}
+		    	catch (JSONException e) {
+			    	this.setHouseNumber(0);
+		    	}
+		    	
+		    	this.setLatitude(geopoint.getLatitude());
+		    	this.setLongitude(geopoint.getLongitude());
+	    	}		    	
 		}
 		catch (MalformedURLException e) {
 			e.printStackTrace();
