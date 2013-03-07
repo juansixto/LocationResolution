@@ -42,10 +42,21 @@ public class Utils {
 		double lat = locationDescriptor.getLatitude();
 		double lng = locationDescriptor.getLongitude();
 		
+		int mod = distance / 110;
+		
+		
+		
 		for(LocationDescriptor ld : lld) {
-			int dist = calculateDistance(lat, lng, ld.getLatitude(), ld.getLongitude());
-			if( (dist <= distance) && (dist != 0) ) {
-				return true;
+			
+			// Experimental sorrounding if
+			
+			int diff = (int) Math.ceil(Math.abs(lat - ld.getLatitude()));
+			
+			if(diff > mod) {
+				int dist = calculateDistance(lat, lng, ld.getLatitude(), ld.getLongitude());
+				if( (dist <= distance) && (dist != 0) ) {
+					return true;
+				}
 			}
 		}
 		return false;
