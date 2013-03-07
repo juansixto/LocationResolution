@@ -13,6 +13,9 @@ import location.resolution.services.YahooGeoPlanet;
 public class Main {
 	
 	public static void main(String[] args) {
+		
+		long start = System.currentTimeMillis();
+		
 		Geonames gn = new Geonames();
 		GoogleReverseCoder grc = new GoogleReverseCoder();
 		OSMNominatim osmn = new OSMNominatim();
@@ -60,5 +63,9 @@ public class Main {
 		
 		new Demo(lld).setVisible(true);
 //		new Demo(lldgn, lldgrc, lldosmn, lldygp).setVisible(true);
+		
+		long end = System.currentTimeMillis();
+		
+		System.out.println("Execution time was: "+( (end-start)/1000 )+" seconds.");
 	}
 }
