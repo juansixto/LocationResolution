@@ -2,10 +2,8 @@ package location.resolution.aux;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
-import location.resolution.models.GeoPoint;
 import location.resolution.models.LocationDescriptor;
 
 public class Utils {
@@ -46,31 +44,10 @@ public class Utils {
 		
 		for(LocationDescriptor ld : lld) {
 			int dist = calculateDistance(lat, lng, ld.getLatitude(), ld.getLongitude());
-			if( (dist < distance) && (dist != 0) ) {
+			if( (dist <= distance) && (dist != 0) ) {
 				return true;
 			}
 		}
-		
 		return false;
-	}
-	
-	public static void main (String args[]) {
-		
-		GeoPoint geopoint1 = new GeoPoint(42.8498032, -2.672999700000001);
-		GeoPoint geopoint2 = new GeoPoint(52.5487429714954, -1.81602098644987);
-		
-		LocationDescriptor ld1 = new LocationDescriptor(geopoint1, null);
-		LocationDescriptor ld2 = new LocationDescriptor(geopoint2, null);
-		
-		List<LocationDescriptor> lld = new ArrayList<>();
-		lld.add(ld1);
-		lld.add(ld2);
-		
-		if(hasAnyPointNear(ld1, lld, 10000)) {
-			System.out.println("Near");
-		}
-		else {
-			System.out.println("Far");
-		}
 	}
 }
