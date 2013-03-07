@@ -5,7 +5,6 @@ import java.util.List;
 
 import location.resolution.gui.Demo;
 import location.resolution.models.LocationDescriptor;
-import location.resolution.models.LocationDetector;
 import location.resolution.services.Geonames;
 import location.resolution.services.GoogleReverseCoder;
 import location.resolution.services.OSMNominatim;
