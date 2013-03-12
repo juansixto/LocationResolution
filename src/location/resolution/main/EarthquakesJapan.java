@@ -7,16 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import location.resolution.gui.Demo;
 import location.resolution.models.LocationDescriptor;
 import location.resolution.services.Geonames;
 import location.resolution.services.GoogleReverseCoder;
 import location.resolution.services.OSMNominatim;
+import location.resolution.services.WebServices;
 import location.resolution.services.YahooGeoPlanet;
 
 public class EarthquakesJapan {
 
 	public static void main(String[] args) {
+		PropertyConfigurator.configure("log4j.properties");
+		Logger logger = Logger.getLogger(WebServices.class);
 		
 		long start = System.currentTimeMillis();
 		
@@ -62,7 +68,7 @@ public class EarthquakesJapan {
 	        
 	        long end = System.currentTimeMillis();
 			
-			System.out.println("Execution time was: "+( (end-start)/1000 )+" seconds.");
+	        logger.info("Execution time was: "+( (end-start)/1000 )+" seconds.");
 	    }
 	}
 }

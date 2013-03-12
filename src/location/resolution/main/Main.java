@@ -21,7 +21,7 @@ public class Main {
 		OSMNominatim osmn = new OSMNominatim();
 		YahooGeoPlanet ygp = new YahooGeoPlanet();
 		
-		String placename = "Vitoria-Gasteiz";
+		String placename = "Calle Madrid, Vitoria-Gasteiz";
 		
 		List<LocationDescriptor> lldgn = gn.searchPlace(placename);
 		List<LocationDescriptor> lldgrc = grc.searchPlace(placename);

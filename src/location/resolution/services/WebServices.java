@@ -3,6 +3,9 @@ package location.resolution.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import location.resolution.models.LocationDescriptor;
 
 public class WebServices {
@@ -37,12 +40,14 @@ public class WebServices {
 	}
 
 	public static void main(String[] args) {
+		PropertyConfigurator.configure("log4j.properties");
+		Logger logger = Logger.getLogger(WebServices.class);
+		
 		String placename = "Vitoria-Gasteiz";
 		
 		WebServices webServices = new WebServices();
 		for(LocationDescriptor ld : webServices.searchPlacename(placename)) {
-			System.out.println(ld.toString());
+			logger.info(ld.toString());
 		}
 	}
-
 }
