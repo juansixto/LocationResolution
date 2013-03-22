@@ -26,7 +26,7 @@ public class Geonames {
 	
 	public Geonames() {
 		PropertyConfigurator.configure("log4j.properties");
-		this.logger = Logger.getLogger(WebServices.class);
+		this.logger = Logger.getLogger(Geonames.class);
 		
 		this.logger.info("Initialising Geonames()");
 		
@@ -54,7 +54,7 @@ public class Geonames {
 		geoPoint.setLatitude(toponym.getLatitude());
 		geoPoint.setLongitude(toponym.getLongitude());
 		
-		this.logger.info("\tNew toponym => (" + geoPoint.getLatitude() + ", " + geoPoint.getLongitude() + ")");
+		this.logger.info("\tNew GeoPoint => (" + geoPoint.getLatitude() + ", " + geoPoint.getLongitude() + ")");
 		
 		return geoPoint;
 	}
@@ -67,7 +67,7 @@ public class Geonames {
 			searchCriteria.setLanguage("en");
 			ToponymSearchResult searchResult = WebService.search(searchCriteria);
 			
-			this.logger.info("Searching Geonames web services for '" + placename + "'");
+			this.logger.info("Searching Geonames web services for '" + placename + "'...");
 			
 			List<Toponym> lt = searchResult.getToponyms();
 			
@@ -86,7 +86,7 @@ public class Geonames {
 			}
 		}
 		catch (Exception e) {
-			this.logger.warn("Exception in module Geonames()");
+			this.logger.warn("Exception in module Geonames.searchPlace()");
 			this.logger.debug(e.toString());
 		}
 		

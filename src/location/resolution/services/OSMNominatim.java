@@ -18,11 +18,15 @@ import location.resolution.models.BoundingBox;
 import location.resolution.models.GeoPoint;
 import location.resolution.models.LocationDescriptor;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OSMNominatim {
+	
+	private Logger logger = null;
 	
 	private static String BASE_URL = "http://nominatim.openstreetmap.org/search?q=";
 	private static String FORMAT = "&format=json&accept-language=en-US&limit=";
@@ -30,20 +34,25 @@ public class OSMNominatim {
 	private static int LIMIT;
 	
 	public OSMNominatim() {
+		PropertyConfigurator.configure("log4j.properties");
+		this.logger = Logger.getLogger(OSMNominatim.class);
+		
+		this.logger.info("Initialising OSMNominatim()");
+		
 		try {
 			Properties prop = new Properties();
 			InputStream is = new FileInputStream("location_resolution.properties");
 			prop.load(is);
 			
 			LIMIT = Integer.parseInt(prop.getProperty("osm_nominatim_limit"));
+			
+			this.logger.info("OSMNominatim() initialised with a maximum results number fixed in " + LIMIT);
 		}
 		catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Unable to load properties file.");
+			this.logger.warn("Unable to find location_resolution.properties file by OSMNominatim.");
 		}
 		catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Unable to load limit for OSMNominatim.");
+			this.logger.warn("Unable to load limit for OSMNominatim.");
 		}
 	}
 	
@@ -51,6 +60,8 @@ public class OSMNominatim {
 		StringBuffer str = new StringBuffer();
 		
 		str.append(BASE_URL).append(query.replaceAll(" ", "+")).append(FORMAT).append(LIMIT);
+		
+		this.logger.info("Query for '" + query + "': " + str.toString());
 		
 		return str.toString();
 	}
@@ -61,9 +72,12 @@ public class OSMNominatim {
 		try {
 			geoPoint.setLatitude(jsonObject.getDouble("lat"));
 			geoPoint.setLongitude(jsonObject.getDouble("lon"));
+			
+			this.logger.info("\tNew GeoPoint => (" + geoPoint.getLatitude() + ", " + geoPoint.getLongitude() + ")");
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			this.logger.warn("JSONException in OSMNominatim.fillGeoPoint()");
+			this.logger.debug(e.toString());
 		}
 		
 		return geoPoint;
@@ -74,8 +88,9 @@ public class OSMNominatim {
 		
 		try {
 			JSONArray boundingBoxJSONArray = jsonObject.getJSONArray("boundingbox");
+			
 			if(boundingBoxJSONArray.length() == 0) {
-				System.out.println("Hey");
+				this.logger.warn("No points for boundingBox found");
 			}
 			
 			int cut = (boundingBoxJSONArray.length() / 2);
@@ -97,12 +112,14 @@ public class OSMNominatim {
 				
 				GeoPoint geoPoint = new GeoPoint(lat, lng);
 								
-				boundingBox.addGeoPoint(geoPoint);
+				boundingBox.addGeoPoint(geoPoint);				
 			}
+			
+			this.logger.info("\tFilled boundingBox");
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
-			System.out.println(jsonObject.getJSONArray("boundingbox"));
+			this.logger.warn("JSONException in OSMNominatim.fillBoundingBox()");
+			this.logger.debug(e.toString());
 		}
 		
 		return boundingBox;
@@ -117,6 +134,9 @@ public class OSMNominatim {
 	    	JSONArray jsonArray = new JSONArray(jsonText);
 	    	is.close();
 	    	
+	    	this.logger.info("Searching OSMNominatim for '" + placename + "'...");
+	    	this.logger.info(jsonArray.length() + " results found.");
+	    	
 	    	for(int i = 0; i < jsonArray.length(); i++) {
 	    		JSONObject jsonObject = jsonArray.getJSONObject(i);
 	    		
@@ -127,25 +147,18 @@ public class OSMNominatim {
 	    	}
 		}
 		catch (MalformedURLException e) {
-			e.printStackTrace();
+			this.logger.warn("MalformedURLException in OSMNominatim.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			this.logger.warn("IOException in OSMNominatim.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			this.logger.warn("JSONException in OSMNominatim.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		
 		return locationDescriptors;
-	}
-	
-	public static void main(String[] args) {
-		OSMNominatim osmn = new OSMNominatim();
-		
-		List<LocationDescriptor> lld = osmn.searchPlace("vitoria-gasteiz");
-        
-		for(LocationDescriptor ld: lld) {
-			System.out.println(ld.toString());
-		}
 	}
 }

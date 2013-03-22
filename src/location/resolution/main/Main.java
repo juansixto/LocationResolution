@@ -29,7 +29,7 @@ public class Main {
 		
 		List<LocationDescriptor> l = new ArrayList<LocationDescriptor>();
 		
-		l = ws.searchPlacename(placename);
+		l = ws.searchPlace(placename);
 		 
 //		List<LocationDescriptor> lldgn = gn.searchPlace(placename);
 //		List<LocationDescriptor> lldgrc = grc.searchPlace(placename);

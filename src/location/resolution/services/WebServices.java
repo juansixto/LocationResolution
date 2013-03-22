@@ -35,7 +35,7 @@ public class WebServices {
 		this.logger.info("WebServices() initialised");
 	}
 	
-	public List<LocationDescriptor> searchPlacename(String placename) {
+	public List<LocationDescriptor> searchPlace(String placename) {
 		List<LocationDescriptor> locationDescriptors = new ArrayList<LocationDescriptor>();
 		if(!this.searchedPlacenames.contains(placename)) {
 			this.searchedPlacenames.add(placename);

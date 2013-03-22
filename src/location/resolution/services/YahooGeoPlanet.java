@@ -18,11 +18,15 @@ import location.resolution.models.BoundingBox;
 import location.resolution.models.GeoPoint;
 import location.resolution.models.LocationDescriptor;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class YahooGeoPlanet {
+	
+	private Logger logger = null;
 	
 	private static String BASE_URL = "http://where.yahooapis.com/v1/places.q('";
 	private static String API_KEY = "";
@@ -30,6 +34,11 @@ public class YahooGeoPlanet {
 	private static int LIMIT;
 	
 	public YahooGeoPlanet() {
+		PropertyConfigurator.configure("log4j.properties");
+		this.logger = Logger.getLogger(YahooGeoPlanet.class);
+		
+		this.logger.info("Initialising YahooGeoPlanet()");
+		
 		try {
 			Properties prop = new Properties();
 			InputStream is = new FileInputStream("location_resolution.properties");
@@ -37,14 +46,14 @@ public class YahooGeoPlanet {
 			
 			API_KEY = prop.getProperty("yahoo_geoplanet_api_key");
 			LIMIT = Integer.parseInt(prop.getProperty("yahoo_geoplanet_limit"));
+			
+			this.logger.info("YahooGeoPlanet() initialised with a maximum results number fixed in " + LIMIT);
 		}
 		catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Unable to load properties file.");
+			this.logger.warn("Unable to find location_resolution.properties file by YahooGeoPlanet.");
 		}
 		catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Unable to load API key for Yahoo GeoPlanet.");
+			this.logger.warn("Unable to load API key for YahooGeoPlanet.");
 		}
 	}
 	
@@ -52,6 +61,8 @@ public class YahooGeoPlanet {
 		StringBuffer str = new StringBuffer();
 		
 		str.append(BASE_URL).append(query.replaceAll(" ", "+")).append("');start=0;count=").append(LIMIT).append("?lang=en&format=json&appid=").append(API_KEY);
+		
+		this.logger.info("Query for '" + query + "': " + str.toString());
 		
 		return str.toString();
 	}
@@ -62,9 +73,12 @@ public class YahooGeoPlanet {
 		try {
 			geoPoint.setLatitude(centroidJSONObject.getDouble("latitude"));
 			geoPoint.setLongitude(centroidJSONObject.getDouble("longitude"));
+			
+			this.logger.info("\tNew GeoPoint => (" + geoPoint.getLatitude() + ", " + geoPoint.getLongitude() + ")");
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			this.logger.warn("JSONException in YahooGeoPlanet.fillGeoPoint()");
+			this.logger.debug(e.toString());
 		}
 		
 		return geoPoint;
@@ -81,9 +95,12 @@ public class YahooGeoPlanet {
 							
 			boundingBox.addGeoPoint(new GeoPoint(southWestJSONObject.getDouble("latitude"), southWestJSONObject.getDouble("longitude")));
 			boundingBox.addGeoPoint(new GeoPoint(northEastJSONObject.getDouble("latitude"), northEastJSONObject.getDouble("longitude")));
+			
+			this.logger.info("\tFilled boundingBox");
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			this.logger.warn("JSONException in YahooGeoPlanet.fillBoundingBox()");
+			this.logger.debug(e.toString());
 		}
 		
 		return boundingBox;
@@ -99,6 +116,9 @@ public class YahooGeoPlanet {
 	    	is.close();
 	    	
 	    	int total = json.getJSONObject("places").getInt("total");
+	    	
+	    	this.logger.info("Searching YahooGeoPlanet for '" + placename + "'...");
+	    	this.logger.info(total + " results found.");
 	    	
 	    	if(total != 0) {
 	    	
@@ -116,25 +136,18 @@ public class YahooGeoPlanet {
 	    	}
 		}
 		catch (MalformedURLException e) {
-			e.printStackTrace();
+			this.logger.warn("MalformedURLException in YahooGeoPlanet.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			this.logger.warn("IOException in YahooGeoPlanet.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		catch (JSONException e) {
-			e.printStackTrace();
+			this.logger.warn("JSONException in YahooGeoPlanet.searchPlace()");
+			this.logger.debug(e.toString());
 		}
 		
 		return locationDescriptors;
-	}
-	
-	public static void main(String[] args) {
-		YahooGeoPlanet ygp = new YahooGeoPlanet();
-		
-		List<LocationDescriptor> lld = ygp.searchPlace("london");
-        
-		for(LocationDescriptor ld: lld) {
-			System.out.println(ld.toString());
-		}
 	}
 }

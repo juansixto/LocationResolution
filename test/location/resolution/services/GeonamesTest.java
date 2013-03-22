@@ -10,27 +10,27 @@ import location.resolution.models.LocationDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WebServicesTest {
+public class GeonamesTest {
 	
-	private WebServices ws = null;
+	private Geonames geonames = null;
 	
 	private List<LocationDescriptor> lld = null;
 
 	@Before
 	public void setUp() throws Exception {
-		this.ws = new WebServices();
+		this.geonames = new Geonames();
 		this.lld = new ArrayList<LocationDescriptor>();
 	}
 
 	@Test
 	public void testSuccessSearchPlace() {
-		lld = this.ws.searchPlace("Vitoria-Gasteiz");
+		lld = this.geonames.searchPlace("Vitoria-Gasteiz");
 		assertTrue(lld.size() > 0);
 	}
 	
 	@Test
 	public void testFailSearchPlace() {
-		lld = this.ws.searchPlace("fakeLocation");
+		lld = this.geonames.searchPlace("fakeLocation");
 		assertFalse(lld.size() > 0);
 	}
 }

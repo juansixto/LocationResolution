@@ -10,27 +10,27 @@ import location.resolution.models.LocationDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WebServicesTest {
-	
-	private WebServices ws = null;
+public class GoogleReverseCoderTest {
+
+	private GoogleReverseCoder grc = null;
 	
 	private List<LocationDescriptor> lld = null;
 
 	@Before
 	public void setUp() throws Exception {
-		this.ws = new WebServices();
+		this.grc = new GoogleReverseCoder();
 		this.lld = new ArrayList<LocationDescriptor>();
 	}
 
 	@Test
 	public void testSuccessSearchPlace() {
-		lld = this.ws.searchPlace("Vitoria-Gasteiz");
+		lld = this.grc.searchPlace("Vitoria-Gasteiz");
 		assertTrue(lld.size() > 0);
 	}
 	
 	@Test
 	public void testFailSearchPlace() {
-		lld = this.ws.searchPlace("fakeLocation");
+		lld = this.grc.searchPlace("fakeLocation");
 		assertFalse(lld.size() > 0);
 	}
 }
