@@ -28,6 +28,8 @@ public class Geonames {
 		PropertyConfigurator.configure("log4j.properties");
 		this.logger = Logger.getLogger(WebServices.class);
 		
+		this.logger.info("Initialising Geonames()");
+		
 		try {
 			Properties prop = new Properties();
 			InputStream is = new FileInputStream("location_resolution.properties");
@@ -36,10 +38,10 @@ public class Geonames {
 			WebService.setUserName(prop.getProperty("geonames_username"));
 			LIMIT = Integer.parseInt(prop.getProperty("geonames_limit"));
 			
-			this.logger.info("location_resolution.properties loaded");
+			this.logger.info("Geonames() initialised with a maximum results number fixed in " + LIMIT);
 		}
 		catch (FileNotFoundException e) {
-			this.logger.warn("Unable to load location_resolution.properties file.");
+			this.logger.warn("Unable to find location_resolution.properties file by Geonames.");
 		}
 		catch (IOException e) {
 			this.logger.warn("Unable to load username for GeoNames.");
@@ -52,6 +54,8 @@ public class Geonames {
 		geoPoint.setLatitude(toponym.getLatitude());
 		geoPoint.setLongitude(toponym.getLongitude());
 		
+		this.logger.info("\tNew toponym => (" + geoPoint.getLatitude() + ", " + geoPoint.getLongitude() + ")");
+		
 		return geoPoint;
 	}
 	
@@ -63,11 +67,15 @@ public class Geonames {
 			searchCriteria.setLanguage("en");
 			ToponymSearchResult searchResult = WebService.search(searchCriteria);
 			
+			this.logger.info("Searching Geonames web services for '" + placename + "'");
+			
 			List<Toponym> lt = searchResult.getToponyms();
 			
 			if(lt.size() < LIMIT) {
-				LIMIT = lt.size();
+				LIMIT = lt.size();				
 			}
+			
+			this.logger.info(LIMIT + " results found.");
 
 			for (int i = 0; i < LIMIT; i++) {
 				Toponym toponym = lt.get(i);
@@ -78,7 +86,8 @@ public class Geonames {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			this.logger.warn("Exception in module Geonames()");
+			this.logger.debug(e.toString());
 		}
 		
 		return locationDescriptors;
