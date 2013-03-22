@@ -13,65 +13,46 @@ import location.resolution.services.YahooGeoPlanet;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static Demo callWebServicesAtOnce(String placename) {
+		WebServices ws = new WebServices();
 		
-		long start = System.currentTimeMillis();
+		List<LocationDescriptor> lld = new ArrayList<LocationDescriptor>();
 		
+		lld = ws.searchPlace(placename);
+		
+		return new Demo(lld);
+	}
+	
+	public static Demo callWebServicesOneByOne(String placename) {
 		Geonames gn = new Geonames();
 		GoogleReverseCoder grc = new GoogleReverseCoder();
 		OSMNominatim osmn = new OSMNominatim();
 		YahooGeoPlanet ygp = new YahooGeoPlanet();
 		
+		List<LocationDescriptor> lldgn = gn.searchPlace(placename);
+		List<LocationDescriptor> lldgrc = grc.searchPlace(placename);
+		List<LocationDescriptor> lldosmn = osmn.searchPlace(placename);
+		List<LocationDescriptor> lldygp = ygp.searchPlace(placename);
+		
+		return new Demo(lldgn, lldgrc, lldosmn, lldygp);
+	}
+	
+	/*
+	 * 	MAIN
+	 */
+	
+	public static void main(String[] args) {
+		
+		long start = System.currentTimeMillis();
+		
+		Demo demo = null;
+		
 		String placename = "Universidad de Deusto";
 		
+//		demo = callWebServicesAtOnce(placename);
+		demo = callWebServicesOneByOne(placename);
 		
-		WebServices ws = new WebServices();
-		
-		List<LocationDescriptor> l = new ArrayList<LocationDescriptor>();
-		
-		l = ws.searchPlace(placename);
-		 
-//		List<LocationDescriptor> lldgn = gn.searchPlace(placename);
-//		List<LocationDescriptor> lldgrc = grc.searchPlace(placename);
-//		List<LocationDescriptor> lldosmn = osmn.searchPlace(placename);
-//		List<LocationDescriptor> lldygp = ygp.searchPlace(placename);
-//		
-//		List<LocationDescriptor> lld = new ArrayList<LocationDescriptor>();
-//		
-//		System.out.println("Geonames:");
-//		System.out.println("---------------------------------");
-//		for(LocationDescriptor ld: lldgrc) {
-//			System.out.println(ld.toString());
-//			lld.add(ld);
-//		}
-//
-//		System.out.println("\nGoogle Reverse Coder:");
-//		System.out.println("---------------------------------");
-//		for(LocationDescriptor ld: lldgn) {
-//			System.out.println(ld.toString());
-//			lld.add(ld);
-//		}
-//
-//		System.out.println("\nOSM Nominatim:");
-//		System.out.println("---------------------------------");
-//		for(LocationDescriptor ld: lldosmn) {
-//			System.out.println(ld.toString());
-//			lld.add(ld);
-//		}
-//
-//		System.out.println("\nYahoo GeoPlanet:");
-//		System.out.println("---------------------------------");
-//		for(LocationDescriptor ld: lldygp) {
-//			System.out.println(ld.toString());
-//			lld.add(ld);
-//		}
-		
-//		LocationDetector ld = new LocationDetector();
-//		ld.detectLocation(lld, (float) 0.1);
-		
-//		new Demo(lld).setVisible(true);
-//		new Demo(lldgn, lldgrc, lldosmn, lldygp).setVisible(true);
-		new Demo(l).setVisible(true);
+		demo.setVisible(true);
 		
 		long end = System.currentTimeMillis();
 		
